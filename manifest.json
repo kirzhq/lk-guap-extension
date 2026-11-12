@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "ГУАП: мои задания",
+  "description": "Показывает задания pro.guap.ru аккуратным списком по предметам: можно скрывать ненужные работы, помечать их цветом и исправлять номера.",
+  "version": "2.1.2",
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["https://pro.guap.ru/inside/student/tasks*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_start"
+    }
+  ]
+}

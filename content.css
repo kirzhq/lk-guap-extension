@@ -1,0 +1,238 @@
+/* Цвета пометок — меняйте здесь, если хочется другие */
+:root {
+  --gx-c1: 239, 68, 68;   /* красный */
+  --gx-c2: 234, 179, 8;   /* жёлтый */
+  --gx-c3: 34, 197, 94;   /* зелёный */
+  --gx-line: rgba(128, 128, 128, 0.28);
+  --gx-soft: rgba(128, 128, 128, 0.1);
+}
+
+/* Родные фильтры, поиск и таблицу сайта прячем целиком — вместо них наш список */
+html.gx-on #inside_student_tasks_index { display: none !important; }
+
+/* ---------- Шапка: семестр, поиск, сводка ---------- */
+
+.gx-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.gx-toolbar .gx-semester { flex: 0 0 auto; width: auto; min-width: 210px; }
+.gx-toolbar .gx-search { flex: 1 1 240px; min-width: 0; max-width: 420px; margin-left: auto; }
+
+.gx-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 16px;
+  min-height: 28px;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+.gx-summary { opacity: 0.7; }
+.gx-hidden-info { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.gx-hidden-info[hidden] { display: none; }
+.gx-hidden-info span { opacity: 0.7; }
+.gx-hidden-info button {
+  all: unset;
+  cursor: pointer;
+  padding: 2px 10px;
+  border: 1px solid var(--gx-line);
+  border-radius: 6px;
+}
+.gx-hidden-info button:hover { background: var(--gx-soft); }
+
+/* ---------- Кнопки цвета и скрытия ---------- */
+
+.gx-ctl {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.gx-ctl button {
+  all: unset;
+  box-sizing: border-box;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--gx-line);
+  border-radius: 6px;
+  cursor: pointer;
+  color: inherit;
+  font-size: 12px;
+}
+.gx-ctl button:hover { background: rgba(128, 128, 128, 0.25); }
+.gx-ctl button:focus-visible,
+.gx-menu-item:focus-visible { outline: 2px solid #1f6fb5; outline-offset: 1px; }
+.gx-ctl .gx-hide i { opacity: 0.65; }
+.gx-ctl .gx-hide:hover i { opacity: 1; }
+
+/* Кружок цвета: пустой пунктирный, пока цвет не выбран */
+.gx-swatch {
+  flex: none;
+  box-sizing: border-box;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px dashed rgba(128, 128, 128, 0.8);
+}
+.gx-swatch[data-c] { border: 0; }
+.gx-swatch[data-c="1"] { background: rgb(var(--gx-c1)); }
+.gx-swatch[data-c="2"] { background: rgb(var(--gx-c2)); }
+.gx-swatch[data-c="3"] { background: rgb(var(--gx-c3)); }
+
+/* Выпадающее меню с цветами */
+.gx-menu {
+  position: fixed;
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  padding: 4px;
+  border: 1px solid var(--gx-line);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  font-size: 13px;
+}
+.gx-menu[hidden] { display: none; }
+.gx-menu-item {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.gx-menu-item:hover { background: rgba(128, 128, 128, 0.22); }
+.gx-menu-item.gx-current { font-weight: 600; }
+.gx-menu-item.gx-current::after { content: '✓'; margin-left: auto; padding-left: 12px; }
+
+/* ---------- Список по предметам ---------- */
+
+.gx-view { display: grid; gap: 14px; }
+
+.gx-subj {
+  border: 1px solid var(--gx-line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.gx-subj-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--gx-soft);
+  cursor: pointer;
+  user-select: none;
+}
+.gx-caret { flex: none; width: 12px; opacity: 0.6; transition: transform 0.15s; }
+.gx-collapsed .gx-caret { transform: rotate(-90deg); }
+.gx-subj-name { flex: 1 1 auto; min-width: 0; font-size: 15px; font-weight: 600; }
+.gx-subj-stat { flex: none; font-size: 12px; opacity: 0.7; white-space: nowrap; }
+.gx-progress {
+  flex: none;
+  width: 90px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(128, 128, 128, 0.3);
+  overflow: hidden;
+}
+.gx-progress i { display: block; height: 100%; background: rgb(var(--gx-c3)); }
+.gx-subj-link { flex: none; font-size: 12px; opacity: 0.7; white-space: nowrap; }
+.gx-subj-link:hover { opacity: 1; }
+
+.gx-task {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 140px 64px 150px 60px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px 10px 10px;
+  border-top: 1px solid var(--gx-line);
+  border-left: 4px solid transparent;
+}
+.gx-task:hover { background: var(--gx-soft); }
+.gx-task.gx-c1 { border-left-color: rgb(var(--gx-c1)); background: rgba(var(--gx-c1), 0.14); }
+.gx-task.gx-c2 { border-left-color: rgb(var(--gx-c2)); background: rgba(var(--gx-c2), 0.14); }
+.gx-task.gx-c3 { border-left-color: rgb(var(--gx-c3)); background: rgba(var(--gx-c3), 0.14); }
+.gx-task.gx-hidden > :not(.gx-ctl) { opacity: 0.4; }
+
+.gx-num {
+  font-size: 12px;
+  opacity: 0.6;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 2px 0;
+}
+.gx-num:hover { opacity: 1; background: rgba(128, 128, 128, 0.25); }
+.gx-num-input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 2px;
+  font: inherit;
+  font-size: 12px;
+  text-align: center;
+  color: inherit;
+  background: transparent;
+  border: 1px solid #1f6fb5;
+  border-radius: 4px;
+  outline: none;
+}
+.gx-title { display: block; font-weight: 500; text-decoration: none; overflow-wrap: anywhere; }
+.gx-title:hover { text-decoration: underline; }
+.gx-meta { margin-top: 2px; font-size: 12px; opacity: 0.65; }
+.gx-meta a { color: inherit; text-decoration: none; }
+.gx-meta a:hover { text-decoration: underline; }
+/* Комментарии преподавателя под названием работы */
+.gx-comments { display: grid; gap: 6px; margin-top: 8px; }
+.gx-comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border-left: 3px solid rgb(var(--gx-c2));
+  background: rgba(128, 128, 128, 0.14);
+  font-size: 13px;
+  line-height: 1.35;
+}
+.gx-comment > i { flex: none; margin-top: 2px; font-size: 12px; opacity: 0.7; }
+.gx-comment-bad { border-left-color: rgb(var(--gx-c1)); }
+.gx-comment-ok { border-left-color: rgb(var(--gx-c3)); }
+.gx-comment-old { opacity: 0.55; }
+.gx-comment-text { white-space: pre-line; overflow-wrap: anywhere; }
+.gx-comment-meta { display: block; margin-top: 2px; font-size: 11px; opacity: 0.6; }
+
+.gx-status { text-align: center; }
+.gx-points { text-align: center; font-size: 13px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.gx-deadline { display: flex; flex-direction: column; font-size: 13px; line-height: 1.3; }
+.gx-date { font-variant-numeric: tabular-nums; }
+.gx-hint { font-size: 11px; }
+.gx-muted { opacity: 0.55; font-size: 12px; }
+.gx-soon { color: rgb(var(--gx-c2)); }
+.gx-late { color: rgb(var(--gx-c1)); font-weight: 600; }
+.gx-task .gx-ctl { justify-self: end; }
+.gx-empty { padding: 32px; text-align: center; opacity: 0.6; }
+
+@media (max-width: 1100px) {
+  .gx-task { grid-template-columns: 38px minmax(0, 1fr) auto auto auto; row-gap: 6px; }
+  .gx-main { grid-column: 2 / -1; }
+  .gx-status { grid-column: 2; text-align: left; }
+  .gx-points { grid-column: 3; }
+  .gx-deadline { grid-column: 4; flex-direction: row; gap: 8px; align-items: baseline; }
+  .gx-task .gx-ctl { grid-column: 5; }
+  .gx-subj-head { flex-wrap: wrap; }
+  .gx-toolbar .gx-search { max-width: none; }
+}
